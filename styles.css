@@ -1,0 +1,1386 @@
+/* ============================================================
+   Andrei Angelescu — Portfolio
+   Source: Figma "Home Page 6" (HwEd07FbrKbIVPVOpKLFhl, node 93:1026)
+   Responsive: mobile-first, with tablet (>=720) and desktop (>=1080)
+   ============================================================ */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --color-bg: #ffffff;
+  --color-ink: #1e1e1e;
+  --color-muted: #a9a9a9;
+  --color-muted-2: #aaaaaa;
+  --color-surface-soft: rgba(0, 0, 0, 0.04);
+  --color-surface-softer: rgba(0, 0, 0, 0.025);
+  --color-btn: rgba(166, 166, 166, 0.12);
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+  --radius-pill: 48px;
+
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    sans-serif;
+
+  /* Inter-section spacing — Figma uses 120px between sections, 160px at major boundaries */
+  --gap-section: clamp(80px, 9vw, 120px);
+  --gap-major: clamp(96px, 11vw, 160px);
+  --pad-page: clamp(20px, 4vw, 40px);
+  --content-max: 1360px;
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.4;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; padding: 0; margin: 0; }
+button { font: inherit; cursor: pointer; background: none; border: 0; padding: 0; color: inherit; }
+
+.skip-link {
+  position: absolute; left: -9999px; top: 0;
+  background: #000; color: #fff; padding: 8px 12px; z-index: 100;
+}
+.skip-link:focus { left: 8px; top: 8px; }
+
+/* ---------- Layout ---------- */
+/* Page padding is the same on all four sides — no max-width cap, so the
+   left/right gutter always equals the top/bottom gutter regardless of how
+   wide the viewport is. Extra top padding under the sticky nav so the
+   hero title sits where Home Page 6 designs it (~180px from top). */
+.page {
+  padding: clamp(72px, 9vw, 132px) var(--pad-page) var(--pad-page);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-major);
+}
+
+/* Sections inside <main> are stacked with explicit spacing.
+   Using flex gap + adjacent-sibling margin as a redundant fallback
+   ensures the spacing is preserved even if a parent override sneaks in. */
+#main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+}
+#main > section + section { margin-top: 0; }
+#main > .hero { margin-bottom: calc(var(--gap-major) - var(--gap-section)); }
+#main > .cta { margin-top: calc(var(--gap-major) - var(--gap-section)); }
+
+/* ---------- Eyebrow ---------- */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-muted);
+  letter-spacing: -0.32px;
+  margin: 0 0 24px;
+}
+.eyebrow .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-muted);
+  flex-shrink: 0;
+}
+.eyebrow--no-dot { margin-bottom: 12px; }
+
+/* ---------- Nav (sticky top bar) ---------- */
+/* Sits as a sibling of .page so it spans the full viewport width
+   regardless of .page's inner padding. Fully transparent — no background
+   or blur — so the page content flows behind it. */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.32px;
+  gap: 24px;
+  padding: 20px var(--pad-page);
+  background: transparent;
+}
+.nav__brand { justify-self: start; }
+.nav .di { justify-self: center; position: relative; }
+.nav__cta { justify-self: end; }
+html { scroll-padding-top: 92px; }
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-ink);
+}
+.nav__logo {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex-shrink: 0;
+}
+.nav__brand-text { display: inline-flex; align-items: baseline; }
+.nav__brand-light { font-weight: 400; }
+.nav__brand-bold { font-weight: 600; }
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: var(--color-muted-2);
+}
+.nav__links a {
+  transition: color 160ms ease;
+  font-weight: 600;
+  text-align: center;
+}
+.nav__links a:hover,
+.nav__links a:focus-visible { color: var(--color-ink); }
+
+/* "Book a call" pill — hugs its content with the same 12px-ish padding
+   ratio as the Dynamic Island so both pills feel balanced even though
+   they have different widths. Dark fill (#1E1E1E), white label. */
+.nav__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 48px;
+  background: #1e1e1e;
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: -0.28px;
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+.nav__cta:hover,
+.nav__cta:focus-visible {
+  background: #2a2a2a;
+  transform: translateY(-1px);
+}
+.nav__cta-icon { width: 24px; height: 24px; }
+.nav__cta-icon-img { width: 24px; height: 24px; }
+.nav__cta-icon {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.nav__cta-icon-img {
+  position: absolute;
+  inset: 0;
+  width: 24px;
+  height: 24px;
+  display: block;
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav__cta-icon-img--hover {
+  opacity: 0;
+  transform: translateY(2px) scale(0.96);
+}
+.nav__cta:hover .nav__cta-icon-img--neutral,
+.nav__cta:focus-visible .nav__cta-icon-img--neutral {
+  opacity: 0;
+  transform: translateY(-2px) scale(0.96);
+}
+.nav__cta:hover .nav__cta-icon-img--hover,
+.nav__cta:focus-visible .nav__cta-icon-img--hover {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ---------- Hero ---------- */
+.hero { display: flex; flex-direction: column; }
+.hero__title {
+  font-weight: 500;
+  font-size: clamp(36px, 5.5vw, 60px);
+  line-height: 1.13;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  max-width: 1113px;
+  margin: 0;
+}
+
+/* ---------- Approach ---------- */
+.approach__card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  align-items: start;
+  padding: 36px;
+  border-radius: 20px;
+  background: rgba(169, 169, 169, 0.12);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+.approach__text {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+.approach__heading {
+  font-size: clamp(22px, 2.5vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-ink);
+}
+.approach__heading strong {
+  font-weight: 700;
+}
+.approach__body { display: flex; flex-direction: column; gap: 14px; }
+.approach__body p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #999;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+.approach__media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ---------- Carousel ---------- */
+.carousel {
+  position: relative;
+  width: 100%;
+  /* Match the source photo aspect ratio (4347×2198 ≈ 1.978:1) so the
+     images fill the placeholder edge-to-edge without losing the
+     side content of multi-panel collages. */
+  aspect-ratio: 1.978 / 1;
+  background: #000;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.carousel__track {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.carousel__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 800ms ease;
+  pointer-events: none;
+}
+.carousel__slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.carousel__slide img {
+  width: 100%;
+  height: 100%;
+  /* Container aspect ratio matches the source — cover with no cropping. */
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.approach__dots {
+  display: flex;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.approach__dots button {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  display: block;
+  cursor: pointer;
+  transition: background-color 200ms ease, transform 200ms ease;
+  padding: 0;
+  border: 0;
+}
+.approach__dots button:hover { transform: scale(1.2); }
+.approach__dots button[aria-selected="true"] {
+  background: var(--color-ink);
+}
+.approach__dots button:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* ---------- Projects ---------- */
+.projects__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+.project-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.project {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+.project__media {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  /* Slightly shorter than before (672/540 → 672/500) so each image
+     completely fills its tile and feels more balanced beside the
+     project info underneath. */
+  aspect-ratio: 672 / 500;
+  background: transparent;
+  border: none;
+}
+.project__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
+}
+.project__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.project__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  line-height: 1.3;
+}
+.project__meta {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-muted);
+  line-height: 1.3;
+}
+
+/* ---------- Brand Identities ---------- */
+.brand__header { margin-bottom: 32px; }
+.brand__heading {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--color-ink);
+  max-width: 1113px;
+}
+
+/* Folder icon (Apple Finder-style) — sized to match Figma's 100×84 visual footprint */
+.folder-icon {
+  width: 100px;
+  height: 84px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25))
+          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15))
+          drop-shadow(0 6px 12px rgba(12, 112, 168, 0.18));
+}
+
+/* Bento grid — mobile: single column */
+.bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 0;
+}
+.bento__folder {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-soft);
+  aspect-ratio: 1 / 1;
+}
+.bento__folder figcaption {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.32px;
+  color: var(--color-ink);
+  text-align: center;
+}
+.bento__tile {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface-soft);
+  aspect-ratio: 17 / 12;
+  border: none;
+}
+.bento__tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+@media (hover: hover) and (pointer: fine) {
+  .bento__tile:hover img { transform: scale(1.06); }
+}
+.bento__tile--hero { aspect-ratio: 96 / 50; }
+.bento__tile--r3a,
+.bento__tile--r3b { aspect-ratio: 65 / 24; }
+
+/* ---------- Reflections ---------- */
+.reflections__heading {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: clamp(36px, 5.5vw, 60px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 60px;
+  color: var(--color-ink);
+}
+.reflections__star {
+  width: clamp(36px, 5vw, 60px);
+  height: clamp(36px, 5vw, 60px);
+}
+.reflections__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+  perspective: 1200px;
+}
+.reflect-card {
+  background: var(--color-surface-soft);
+  color: var(--color-ink);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.reflect-card__mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 250px;
+}
+.reflect-card__dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.22);
+  flex-shrink: 0;
+}
+.reflect-card__line {
+  flex: 1;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.12);
+  max-width: 110px;
+}
+.reflect-card h3 {
+  margin: 0;
+  font-size: clamp(22px, 2.4vw, 32px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-ink);
+}
+.reflect-card p {
+  margin: 0;
+  font-size: clamp(16px, 1.6vw, 20px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-muted);
+  line-height: 1.4;
+}
+
+/* ---------- CTA ---------- */
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  text-align: center;
+  max-width: 1113px;
+  margin: 0 auto;
+  width: 100%;
+}
+.cta__heading {
+  font-size: clamp(36px, 5.5vw, 60px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--color-ink);
+}
+.cta__body {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #a9a9a9;
+  margin: 0;
+  max-width: 800px;
+}
+.cta__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 36px;
+  border-radius: var(--radius-pill);
+  background: var(--color-btn);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  line-height: 1.25;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+.btn:hover,
+.btn:focus-visible {
+  background: rgba(166, 166, 166, 0.22);
+  transform: translateY(-1px);
+}
+
+/* ---------- Footer ---------- */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  letter-spacing: -0.32px;
+  color: var(--color-muted);
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  color: var(--color-muted);
+}
+.footer__logo {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.footer__links {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  font-weight: 600;
+}
+.footer__links a {
+  color: var(--color-muted);
+  transition: color 160ms ease;
+}
+.footer__links a:hover,
+.footer__links a:focus-visible { color: var(--color-ink); }
+.footer__top { transition: color 160ms ease; }
+
+/* ============================================================
+   STARTUP / INTRO SCREEN — fade out after greeting
+   ============================================================ */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 700ms ease;
+}
+.intro.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+.intro.is-gone {
+  display: none;
+}
+body.intro-active {
+  overflow: hidden;
+}
+.intro__text {
+  margin: 0;
+  text-align: center;
+  font-weight: 500;
+  /* Fits on ONE line. JS sets the actual font-size based on text length;
+     the clamp is a fallback for the brief moment before JS runs. */
+  font-size: clamp(20px, 6vw, 60px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  max-width: 100%;
+  white-space: nowrap;
+}
+/* Per-character staggered animation. Each .intro__char fades + un-blurs in. */
+.intro__char {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(6px);
+  animation: introCharIn 600ms ease forwards;
+  animation-delay: var(--char-delay, 0ms);
+}
+@keyframes introCharIn {
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   TABLET (>= 720px)
+   ============================================================ */
+@media (min-width: 720px) {
+  /* Tablet+: pair the projects horizontally with the expand-on-hover effect.
+     The .project-pair is a query container so we can lock the image height
+     to its DEFAULT (50/50) value, regardless of which card is hovered.
+     That way the hover animates WIDTH only — never height. */
+  .project-pair {
+    flex-direction: row;
+    gap: 16px;
+    align-items: stretch;
+    container-type: inline-size;
+  }
+  .project-pair > .project {
+    flex: 1 1 0;
+    min-width: 0;
+    transition: flex-grow 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Lock image height to the default (50/50) state, slightly shorter than
+     before so the project tiles feel more balanced.
+     pair width = 100cqw; default card width = (100cqw - 16px) / 2;
+     default image height = default card width × 500 / 672. */
+  .project-pair > .project > .project__media {
+    aspect-ratio: auto;
+    height: calc((100cqw - 16px) / 2 * 500 / 672);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .project-pair:hover > .project { flex-grow: 1; }
+    .project-pair > .project:hover { flex-grow: 1.85; }
+    .project-pair:hover > .project:not(:hover) { flex-grow: 1; }
+  }
+
+  .reflections__grid {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: end;
+  }
+
+  /* Bento — tablet: 2-col mosaic */
+  .bento {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .bento__folder { aspect-ratio: 1 / 1; }
+  .bento__tile--hero { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+}
+
+/* ============================================================
+   DESKTOP (>= 1080px)
+   ============================================================ */
+@media (min-width: 1080px) {
+  .approach__card {
+    /* Two equal halves with 120px between them, matching Figma's 584/120/584 layout */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 120px;
+    min-height: 480px;
+    padding: 36px;
+  }
+  .approach__media { align-self: stretch; justify-content: space-between; }
+  .carousel {
+    /* Keep the 1.978 aspect at desktop so source photos cover without
+       cropping. Width is bounded by the column; height follows. */
+    width: 100%;
+    height: auto;
+  }
+
+  .reflections__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    align-items: end;
+  }
+  /* Cards have different heights but share a common bottom baseline */
+  .reflect-card { min-height: 420px; }
+  .reflect-card--short { min-height: 345px; }
+
+  .cta__buttons { gap: 40px; }
+
+  /* Bento — desktop: full 3-row layout matching the 1360px Figma frame */
+  .bento {
+    grid-template-columns: 240fr 340fr 340fr 340fr;
+    grid-template-rows: 240px 500px 240px;
+    gap: 20px;
+  }
+  .bento__folder {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    aspect-ratio: auto;
+  }
+  .bento__tile--r1a { grid-column: 2 / 3; grid-row: 1 / 2; aspect-ratio: auto; }
+  .bento__tile--r1b { grid-column: 3 / 4; grid-row: 1 / 2; aspect-ratio: auto; }
+  .bento__tile--r1c { grid-column: 4 / 5; grid-row: 1 / 2; aspect-ratio: auto; }
+
+  .bento__tile--hero {
+    grid-column: 1 / 4;
+    grid-row: 2 / 3;
+    aspect-ratio: auto;
+  }
+  .bento__tile--r2a {
+    grid-column: 4 / 5; grid-row: 2 / 3;
+    aspect-ratio: auto; height: 240px; align-self: start;
+  }
+  .bento__tile--r2b {
+    grid-column: 4 / 5; grid-row: 2 / 3;
+    aspect-ratio: auto; height: 240px; align-self: end;
+  }
+
+  .bento__tile--r3a { grid-column: 1 / 3; grid-row: 3 / 4; aspect-ratio: auto; }
+  .bento__tile--r3b { grid-column: 3 / 5; grid-row: 3 / 4; aspect-ratio: auto; }
+}
+
+/* ============================================================
+   LARGE DESKTOP polish (>= 1280px)
+   ============================================================ */
+@media (min-width: 1280px) {
+  .approach__heading { margin-bottom: 40px; }
+}
+
+/* ============================================================
+   Dynamic Island — sits in the centre of the sticky top bar.
+   Closed state: dark pill with menu / weather / temperature / email.
+   Open state: a translucent panel pops below the pill containing
+   the navigation links. The pill itself stays put so the top bar's
+   height never changes.
+   ============================================================ */
+.di {
+  position: relative;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  pointer-events: auto;
+}
+.di.is-ready { opacity: 1; }
+
+/* The dark pill at the top */
+.di__pill {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 4px 12px;
+  height: 44px;
+  background: #1e1e1e;
+  border-radius: 48px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.di__menu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.28px;
+}
+.di__menu-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  outline-offset: 4px;
+  border-radius: 16px;
+}
+
+/* Hamburger toggle that morphs to an X on open. The container
+   rotates -45° and the first path's stroke-dasharray animates to draw
+   a longer, offset segment. Mirrors the 21st.dev MenuToggleIcon. */
+.menu-toggle {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  color: #fff;
+}
+.menu-toggle__a {
+  stroke-dasharray: 12 63;
+  transition: stroke-dasharray 500ms cubic-bezier(0.22, 1, 0.36, 1),
+              stroke-dashoffset 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.menu-toggle__b {
+  transition: opacity 200ms ease;
+}
+.di.is-open .menu-toggle { transform: rotate(-45deg); }
+.di.is-open .menu-toggle__a {
+  stroke-dasharray: 20 300;
+  stroke-dashoffset: -32.42px;
+}
+
+.di__menu-label { font-weight: 500; }
+
+/* Weather + temperature */
+.di__weather {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.di__weather-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
+}
+.di__temp {
+  display: inline-flex;
+  align-items: baseline;
+  color: #fff;
+  font-weight: 500;
+  letter-spacing: -0.32px;
+}
+.di__temp-num { font-size: 16px; }
+.di__temp-deg {
+  font-size: 10.32px;
+  margin-left: 0.5px;
+}
+
+/* Email icon — neutral by default, swaps to hover variant on hover */
+.di__email {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+.di__email-icon {
+  position: absolute;
+  inset: 0;
+  width: 24px;
+  height: 24px;
+  display: block;
+  transition: opacity 220ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.di__email-icon--hover {
+  opacity: 0;
+  transform: translateY(2px) scale(0.96);
+}
+.di__email:hover .di__email-icon--neutral,
+.di__email:focus-visible .di__email-icon--neutral {
+  opacity: 0;
+  transform: translateY(-2px) scale(0.96);
+}
+.di__email:hover .di__email-icon--hover,
+.di__email:focus-visible .di__email-icon--hover {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* The open menu panel — floats below the pill so the top bar height
+   stays constant. Background and blur match the Dynamic Island - Open
+   spec exactly: rgba(169,169,169,0.12) + backdrop-filter blur(24px). */
+.di__menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 244px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(169, 169, 169, 0.12);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 280ms ease,
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.di.is-open .di__menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.di__menu-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.di__menu-main li { display: block; }
+.di__menu-item,
+.di__menu-social-link {
+  display: inline-block;
+  position: relative;
+  height: 1.2em;
+  overflow: hidden;
+  color: #1e1e1e;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  font-size: 20px;
+  text-decoration: none;
+  line-height: 1.2;
+}
+.di__menu-social-link {
+  font-size: 12px;
+  letter-spacing: -0.24px;
+}
+.di__menu-item-text {
+  display: block;
+  height: 1.2em;
+  line-height: 1.2;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+              color 240ms ease;
+}
+.di__menu-item:hover .di__menu-item-text,
+.di__menu-item:focus-visible .di__menu-item-text,
+.di__menu-social-link:hover .di__menu-item-text,
+.di__menu-social-link:focus-visible .di__menu-item-text {
+  transform: translateY(-100%);
+}
+.di__menu-item-text--clone { color: #999; }
+
+.di__menu-divider {
+  height: 1px;
+  width: 100%;
+  background: rgba(169, 169, 169, 0.6);
+}
+.di__menu-section { display: flex; flex-direction: column; gap: 8px; }
+.di__menu-section-title {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  color: #999;
+}
+.di__menu-social {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Reduce the dynamic island padding on narrow screens */
+@media (max-width: 520px) {
+  .di__pill { gap: 14px; padding: 4px 10px; }
+  .di__menu-label { display: none; }
+}
+
+/* ============================================================
+   About Me Pop-up — opens when the "Andrei" dock icon is clicked.
+   Frosted-glass panel (matching Dynamic Island - Open spec) with text
+   on the left and the AA logo card on the right. Closes on click
+   outside, on the X button, or on Escape.
+   ============================================================ */
+.about {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 320ms ease;
+}
+.about.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.about__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.22);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+.about__panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(32px, 6vw, 120px);
+  width: min(1200px, 100%);
+  max-height: calc(100vh - clamp(32px, 8vw, 80px));
+  padding: clamp(28px, 4vw, 60px);
+  border-radius: clamp(28px, 4vw, 60px);
+  /* Whiter than the previous grey while keeping the glass blur, so the
+     body copy reads clearly. */
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(60px) saturate(160%);
+  backdrop-filter: blur(60px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.18),
+    0 8px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(12px) scale(0.985);
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  overflow-y: auto;
+}
+.about.is-open .about__panel {
+  transform: translateY(0) scale(1);
+}
+.about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 477px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.about__text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  color: #1e1e1e;
+}
+.about__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.48px;
+  line-height: 1.2;
+}
+.about__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.32px;
+  color: #1e1e1e;
+}
+.about__body p { margin: 0; }
+.about__body--muted { color: #a9a9a9; }
+.about__social {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.about__social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #1e1e1e;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.32px;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 4px 8px 4px 0;
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms ease;
+}
+.about__social-link:hover,
+.about__social-link:focus-visible {
+  transform: translateX(4px);
+  color: #000;
+}
+.about__social-icon {
+  width: 36px;
+  height: 36px;
+  display: block;
+  flex-shrink: 0;
+}
+.about__logo {
+  margin: 0;
+  flex: 1 1 0;
+  align-self: stretch;
+  min-width: 280px;
+  max-width: 483px;
+  background: #fff;
+  border-radius: clamp(28px, 4vw, 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(40px, 8vw, 120px);
+  aspect-ratio: 483 / 636;
+}
+.about__logo img {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.about__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  color: #1e1e1e;
+  cursor: pointer;
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+.about__close:hover,
+.about__close:focus-visible {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.05);
+}
+.about__close svg { width: 16px; height: 16px; }
+
+/* Body lock while popup is open */
+body.about-open { overflow: hidden; }
+
+/* Responsive: stack vertically on narrow viewports */
+@media (max-width: 880px) {
+  .about__panel {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+  }
+  .about__content { max-width: none; }
+  .about__logo {
+    aspect-ratio: 16 / 10;
+    min-width: 0;
+    max-width: none;
+    padding: clamp(36px, 14vw, 80px);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .about { transition: opacity 1ms; }
+  .about__panel { transition: transform 1ms; transform: none; }
+}
+
+/* ============================================================
+   Home Dock — macOS-style with cosine magnification.
+   JS sets each .dock__item's width / height / left in pixels.
+   ============================================================ */
+.dock {
+  position: fixed;
+  bottom: clamp(16px, 2.5vw, 28px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(243, 243, 243, 0.55);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 28px;
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  pointer-events: auto;
+  /* Subtle entrance after the intro screen finishes */
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  transition: opacity 600ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dock.is-ready {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.dock__inner {
+  position: relative;
+  /* width + height set dynamically by JS */
+}
+.dock__item {
+  position: absolute;
+  bottom: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  cursor: pointer;
+  transform-origin: bottom center;
+  /* width / height / left set by JS */
+}
+.dock__item img {
+  /* Each PNG is a 256×256 square with the icon content perfectly centered,
+     no internal border or shadow padding — they all render at exactly the
+     same size with `width: 100%`. */
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border: 0;
+  outline: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.16));
+}
+.dock__item:focus-visible {
+  outline: 2px solid rgba(30, 30, 30, 0.6);
+  outline-offset: 4px;
+  border-radius: 16px;
+}
+.dock__tooltip {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(28, 28, 28, 0.92);
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+.dock__tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(28, 28, 28, 0.92);
+}
+.dock__item:hover .dock__tooltip,
+.dock__item:focus-visible .dock__tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.dock__divider {
+  position: absolute;
+  bottom: 0;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.16);
+  pointer-events: none;
+  /* left / height set by JS */
+}
+.dock__item.is-bouncing {
+  animation: dockBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes dockBounce {
+  0% { translate: 0 0; }
+  40% { translate: 0 -16px; }
+  100% { translate: 0 0; }
+}
+
+/* On narrow viewports, give the dock a little more breathing room
+   from the page padding. */
+@media (max-width: 520px) {
+  .dock {
+    padding: 10px 12px;
+    border-radius: 22px;
+  }
+  .dock__tooltip {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
+/* ============================================================
+   Scroll reveals (Motion One)
+   Initial state is set here so the elements are hidden BEFORE the
+   JS attaches `inView` observers — avoids any flash of content.
+   Motion-driven `animate()` will progress them to the visible state.
+   ============================================================ */
+[data-reveal],
+[data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: opacity, transform;
+}
+.no-js [data-reveal],
+.no-js [data-reveal-stagger] > * {
+  opacity: 1;
+  transform: none;
+}
+
+/* Respect motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .carousel__slide { transition: opacity 1ms; }
+  [data-reveal],
+  [data-reveal-stagger] > * {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,19 @@
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# Claude Code session data (local only)
+.claude/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# Logs / build artefacts (not used today but reserved)
+*.log
+node_modules/
+dist/
+build/

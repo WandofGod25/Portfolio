@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Andrei Angelescu — Portfolio</title>
+  <meta name="description" content="Product and Design Leader, turning complex challenges into complete product experiences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=21" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== STARTUP / INTRO ===== -->
+  <div class="intro" id="intro" role="dialog" aria-label="Welcome">
+    <p class="intro__text" id="introText" aria-live="polite"></p>
+  </div>
+
+  <span id="top" aria-hidden="true"></span>
+
+  <!-- ===== NAV (sticky top bar) — sibling of .page so it spans full viewport ===== -->
+  <header class="nav" role="banner">
+      <a class="nav__brand" href="#top">
+        <img class="nav__logo" src="images/aa-logo.png?v=21" alt="" aria-hidden="true" />
+        <span class="nav__brand-text">
+          <span class="nav__brand-light">andrei</span><span class="nav__brand-bold">&nbsp;angelescu</span>
+        </span>
+      </a>
+
+      <!-- Dynamic Island lives inside the top bar -->
+      <div class="di" id="dynamicIsland">
+        <div class="di__pill" id="diPill">
+          <button class="di__menu-btn" id="diMenuBtn" type="button" aria-label="Toggle menu" aria-expanded="false">
+            <svg class="menu-toggle" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path class="menu-toggle__a" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22" />
+              <path class="menu-toggle__b" d="M7 16 27 16" />
+            </svg>
+            <span class="di__menu-label">Menu</span>
+          </button>
+          <div class="di__weather" aria-label="Current weather">
+            <img class="di__weather-icon" id="diWeatherIcon" src="images/weather-sun.svg?v=21" alt="" />
+            <span class="di__temp" aria-live="polite">
+              <span class="di__temp-num" id="diTempNum">--</span><span class="di__temp-deg">o</span>
+            </span>
+          </div>
+          <a class="di__email" href="mailto:andrei-angelescu@outlook.com" aria-label="Send email">
+            <img class="di__email-icon di__email-icon--neutral" src="images/email-neutral.svg?v=21" alt="" />
+            <img class="di__email-icon di__email-icon--hover" src="images/email-hover.svg?v=21" alt="" aria-hidden="true" />
+          </a>
+        </div>
+        <div class="di__menu" id="diMenu" aria-hidden="true">
+          <ul class="di__menu-main" role="list">
+            <li><a class="di__menu-item" href="#projects" data-text="Featured work"><span class="di__menu-item-text">Featured work</span><span class="di__menu-item-text di__menu-item-text--clone" aria-hidden="true">Featured work</span></a></li>
+            <li><a class="di__menu-item" href="#brand" data-text="Visual Concepts"><span class="di__menu-item-text">Visual Concepts</span><span class="di__menu-item-text di__menu-item-text--clone" aria-hidden="true">Visual Concepts</span></a></li>
+            <li><a class="di__menu-item" href="#reflections" data-text="Philosophy"><span class="di__menu-item-text">Philosophy</span><span class="di__menu-item-text di__menu-item-text--clone" aria-hidden="true">Philosophy</span></a></li>
+            <li><a class="di__menu-item" href="https://drive.google.com/file/d/1aLbDxtvZEOHcaxY3-IXrBXLYvQGEximH/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-text="Resume"><span class="di__menu-item-text">Resume</span><span class="di__menu-item-text di__menu-item-text--clone" aria-hidden="true">Resume</span></a></li>
+          </ul>
+          <div class="di__menu-divider" aria-hidden="true"></div>
+          <div class="di__menu-section">
+            <p class="di__menu-section-title">Social</p>
+            <ul class="di__menu-social" role="list">
+              <li><a class="di__menu-social-link" href="https://www.linkedin.com/in/angelescuandrei/" target="_blank" rel="noopener noreferrer"><span class="di__menu-item-text">LinkedIn</span><span class="di__menu-item-text di__menu-item-text--clone" aria-hidden="true">LinkedIn</span></a></li>
+              <li><a class="di__menu-social-link" href="https://substack.com/@quantumpill" target="_blank" rel="noopener noreferrer"><span class="di__menu-item-text">Newsletter</span><span class="di__menu-item-text di__menu-item-text--clone" aria-hidden="true">Newsletter</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <a class="nav__cta" href="https://calendly.com/andrei-angelescu/30min" target="_blank" rel="noopener noreferrer">
+        <span class="nav__cta-icon" aria-hidden="true">
+          <img class="nav__cta-icon-img nav__cta-icon-img--neutral" src="images/calendar-neutral.svg?v=21" alt="" />
+          <img class="nav__cta-icon-img nav__cta-icon-img--hover" src="images/calendar-hover.svg?v=21" alt="" />
+        </span>
+        <span class="nav__cta-label">book a call</span>
+      </a>
+    </header>
+
+  <div class="page">
+    <main id="main">
+      <!-- ===== HERO ===== -->
+      <section class="hero" aria-label="Introduction">
+        <h1 class="hero__title">
+          Product and Design Leader, turning complex challenges into complete product experiences.
+        </h1>
+      </section>
+
+      <!-- ===== APPROACH ===== -->
+      <section class="approach" id="approach" aria-labelledby="approach-label">
+        <p class="eyebrow" id="approach-label" data-reveal><span class="dot"></span>Multidisciplinary Approach</p>
+        <div class="approach__card" data-reveal>
+          <div class="approach__text">
+            <h2 class="approach__heading">Connecting people through design and technology to create <strong>experiences</strong> that <strong>matter</strong>.</h2>
+            <div class="approach__body">
+              <p>My work sits at the intersection of digital product design, visual concepts, and cross-functional collaboration.</p>
+              <p>With a background in product strategy, design, and leadership, I focus on creating work that is clear, scalable, and thoughtfully made.</p>
+              <p>I aim to not only design better interfaces, but to create the foundations that help better products happen.</p>
+              <p>Recently I have been focusing on building with AI: researching, building, and shipping, aiming to define how we should rather effectively use AI rather than replace our own workflows by it.</p>
+            </div>
+          </div>
+          <div class="approach__media">
+            <div class="carousel" id="carousel" aria-roledescription="carousel" aria-label="Project photos">
+              <ul class="carousel__track" id="carouselTrack">
+                <li class="carousel__slide is-active"><img src="images/photo-1.webp" alt="Project showcase 1" /></li>
+                <li class="carousel__slide"><img src="images/photo-2.webp" alt="Project showcase 2" loading="lazy" /></li>
+                <li class="carousel__slide"><img src="images/photo-3.webp" alt="Project showcase 3" loading="lazy" /></li>
+                <li class="carousel__slide"><img src="images/photo-4.webp" alt="Project showcase 4" loading="lazy" /></li>
+                <li class="carousel__slide"><img src="images/photo-5.webp" alt="Project showcase 5" loading="lazy" /></li>
+                <li class="carousel__slide"><img src="images/photo-6.webp" alt="Project showcase 6" loading="lazy" /></li>
+                <li class="carousel__slide"><img src="images/photo-7.webp" alt="Project showcase 7" loading="lazy" /></li>
+              </ul>
+            </div>
+            <ul class="approach__dots" id="carouselDots" role="tablist" aria-label="Carousel pagination">
+              <li><button type="button" role="tab" aria-label="Show photo 1" aria-selected="true" data-index="0"></button></li>
+              <li><button type="button" role="tab" aria-label="Show photo 2" aria-selected="false" data-index="1"></button></li>
+              <li><button type="button" role="tab" aria-label="Show photo 3" aria-selected="false" data-index="2"></button></li>
+              <li><button type="button" role="tab" aria-label="Show photo 4" aria-selected="false" data-index="3"></button></li>
+              <li><button type="button" role="tab" aria-label="Show photo 5" aria-selected="false" data-index="4"></button></li>
+              <li><button type="button" role="tab" aria-label="Show photo 6" aria-selected="false" data-index="5"></button></li>
+              <li><button type="button" role="tab" aria-label="Show photo 7" aria-selected="false" data-index="6"></button></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PROJECTS ===== -->
+      <section class="projects" id="projects" aria-labelledby="projects-label">
+        <p class="eyebrow" id="projects-label" data-reveal><span class="dot"></span>Product Design&nbsp;&nbsp;•&nbsp;&nbsp;UX/UI Strategy</p>
+        <div class="projects__grid">
+          <div class="project-pair" data-project-pair data-reveal>
+            <article class="project" data-project>
+              <div class="project__media"><img src="images/aqarios.webp" alt="Aqarios product screen" loading="lazy" /></div>
+              <div class="project__info">
+                <h3 class="project__title">Aqarios: Quantum computing software platform</h3>
+                <p class="project__meta">Product Design • Leadership • Brand Strategy</p>
+              </div>
+            </article>
+            <article class="project" data-project>
+              <div class="project__media"><img src="images/taylor.webp" alt="Taylor product screen" loading="lazy" /></div>
+              <div class="project__info">
+                <h3 class="project__title">Taylor: AI data analysis platform</h3>
+                <p class="project__meta">Founder • Brand Strategy • Product Design</p>
+              </div>
+            </article>
+          </div>
+          <div class="project-pair" data-project-pair data-reveal>
+            <article class="project" data-project>
+              <div class="project__media"><img src="images/helix.webp" alt="Helix product screen" loading="lazy" /></div>
+              <div class="project__info">
+                <h3 class="project__title">Helix: Medical software platform</h3>
+                <p class="project__meta">Product Design • Brand Strategy • Prototyping</p>
+              </div>
+            </article>
+            <article class="project" data-project>
+              <div class="project__media"><img src="images/wevopay.webp" alt="WevoPay product screen" loading="lazy" /></div>
+              <div class="project__info">
+                <h3 class="project__title">WevoPay: Retail payment mobile application</h3>
+                <p class="project__meta">Product Design • UX/UI Strategy • Prototyping</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== BRAND IDENTITIES ===== -->
+      <section class="brand" id="brand" aria-labelledby="brand-label">
+        <header class="brand__header" data-reveal>
+          <p class="eyebrow eyebrow--no-dot" id="brand-label">Brand Identities</p>
+          <h2 class="brand__heading">
+            Visual concepts that resonate.<br />
+            Ideas that are made to last.
+          </h2>
+        </header>
+
+        <div class="bento" data-reveal-stagger>
+          <!-- Row 1: folder + 3 tiles -->
+          <figure class="bento__folder">
+            <svg class="folder-icon" viewBox="0 0 100 84" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="folderBackGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#5BB4DD" />
+                  <stop offset="100%" stop-color="#3E91B6" />
+                </linearGradient>
+                <linearGradient id="folderFrontGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#80D6F6" />
+                  <stop offset="55%" stop-color="#65BFE6" />
+                  <stop offset="100%" stop-color="#4FA9D2" />
+                </linearGradient>
+              </defs>
+              <!-- Back panel with tab on top-left -->
+              <path
+                d="M 5 0 L 35 0 Q 38 0 39.5 2.4 L 42 7 L 94 7 Q 100 7 100 13 L 100 78 Q 100 84 94 84 L 6 84 Q 0 84 0 78 L 0 6 Q 0 0 6 0 Z"
+                fill="url(#folderBackGrad)"
+              />
+              <!-- Front face -->
+              <rect x="0" y="13" width="100" height="71" rx="8" fill="url(#folderFrontGrad)" />
+              <!-- Top highlight on front -->
+              <rect x="2" y="14" width="96" height="1" fill="#ffffff" fill-opacity="0.4" />
+              <!-- Two subtle stripes near the bottom of the front face -->
+              <rect x="0" y="74" width="100" height="1.9" fill="#ffffff" fill-opacity="0.2" />
+              <rect x="0" y="78" width="100" height="1.9" fill="#ffffff" fill-opacity="0.2" />
+            </svg>
+            <figcaption>Logo Design</figcaption>
+          </figure>
+          <div class="bento__tile bento__tile--r1a"><img src="images/brand-1.png" alt="Brand identity — surroundings" loading="lazy" /></div>
+          <div class="bento__tile bento__tile--r1b"><img src="images/brand-2.png" alt="Brand identity — H" loading="lazy" /></div>
+          <div class="bento__tile bento__tile--r1c"><img src="images/brand-3.png" alt="Brand identity — aqarios" loading="lazy" /></div>
+
+          <!-- Row 2: hero tile + stacked column -->
+          <div class="bento__tile bento__tile--hero"><img src="images/brand-wide.png" alt="Surroundings — Art & Music" loading="lazy" /></div>
+          <div class="bento__tile bento__tile--r2a"><img src="images/brand-4.png" alt="Brand identity — H" loading="lazy" /></div>
+          <div class="bento__tile bento__tile--r2b"><img src="images/brand-5.png" alt="Brand identity — identical lab" loading="lazy" /></div>
+
+          <!-- Row 3: two wide tiles -->
+          <div class="bento__tile bento__tile--r3a"><img src="images/brand-6.png" alt="Brand identity — doppio" loading="lazy" /></div>
+          <div class="bento__tile bento__tile--r3b"><img src="images/brand-7.png" alt="Brand identity — P" loading="lazy" /></div>
+        </div>
+      </section>
+
+      <!-- ===== REFLECTIONS ===== -->
+      <section class="reflections" id="reflections" aria-labelledby="reflections-label">
+        <h2 class="reflections__heading" id="reflections-label" data-reveal>
+          Reflections on <img class="reflections__star" src="images/star.png" alt="" /> Design
+        </h2>
+        <div class="reflections__grid" data-reveal-stagger>
+          <article class="reflect-card reflect-card--tall">
+            <span class="reflect-card__mark" aria-hidden="true">
+              <span class="reflect-card__dot"></span>
+              <span class="reflect-card__line"></span>
+            </span>
+            <h3>Design is a Vehicle</h3>
+            <p>Great design can help businesses identify opportunities they didn't even realize existed and execute these ideas in a way that deeply resonates with potential markets and their core values.</p>
+          </article>
+          <article class="reflect-card reflect-card--short">
+            <span class="reflect-card__mark" aria-hidden="true">
+              <span class="reflect-card__dot"></span>
+              <span class="reflect-card__line"></span>
+            </span>
+            <h3>Clarity over Clutter</h3>
+            <p>What matters is not how much is added, but how little is needed to make meaning clear, effortless, and true.</p>
+          </article>
+          <article class="reflect-card reflect-card--tall">
+            <span class="reflect-card__mark" aria-hidden="true">
+              <span class="reflect-card__dot"></span>
+              <span class="reflect-card__line"></span>
+            </span>
+            <h3>Trust the Process</h3>
+            <p>Trust the process of doing. Ideas reveal their truth only when shaped, tested, and touched. Have the courage to explore, fail, and evolve until something real begins to speak for itself.</p>
+          </article>
+          <article class="reflect-card reflect-card--tall">
+            <span class="reflect-card__mark" aria-hidden="true">
+              <span class="reflect-card__dot"></span>
+              <span class="reflect-card__line"></span>
+            </span>
+            <h3>Design beyond Boundaries</h3>
+            <p>Ideas grow stronger when they're shaped by many hands, seen through different eyes, and challenged by unfamiliar voices. True collaboration is not consensus, it's conversation.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== CTA ===== -->
+      <section class="cta" aria-labelledby="cta-label" data-reveal-stagger>
+        <h2 class="cta__heading" id="cta-label">Let's make it happen!</h2>
+        <p class="cta__body">always open to new opportunities, collaborations, and creative challenges. Let's work together to bring your ideas to life.</p>
+        <div class="cta__buttons">
+          <a class="btn" href="https://drive.google.com/file/d/16z7HJ2HNao7oFjSdOo6F8r9iJunYIjzB/view?usp=sharing" target="_blank" rel="noopener noreferrer">Access full portfolio</a>
+          <a class="btn" href="mailto:andrei-angelescu@outlook.com">Contact me</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" role="contentinfo">
+      <div class="footer__brand">
+        <img class="footer__logo" src="images/aa-logo.png?v=21" alt="" aria-hidden="true" />
+        <span>made in several nights with lots of great music.</span>
+      </div>
+      <div class="footer__links">
+        <a href="https://www.linkedin.com/in/angelescuandrei/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="#top" class="footer__top">Scroll up</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===== ABOUT ME POP-UP ===== -->
+  <div class="about" id="aboutPopup" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" aria-hidden="true">
+    <div class="about__backdrop" data-about-close></div>
+    <div class="about__panel" role="document">
+      <div class="about__content">
+        <div class="about__text">
+          <h2 class="about__title" id="aboutTitle">About me</h2>
+          <div class="about__body">
+            <p>I am a product and design leader building digital experiences from 0-1. Over the years, I've led design initiatives across multiple domains, building end-to-end user experiences and brand identities that resonate.</p>
+            <p>In my work, I'm always oriented towards deeply understanding the users' needs and pain points. Great design should always check 3 main traits: clarity, usability, and aesthetics.</p>
+            <p class="about__body--muted">I thrive at the intersection of strategy, design, and technology. I value a high ownership - high flexibility approach, sitting at the table where the important decisions determine the product's future vision.</p>
+            <p class="about__body--muted">Outside of work, you'll find me prototyping new ideas, testing AI tools or making music.</p>
+          </div>
+        </div>
+        <ul class="about__social" role="list">
+          <li>
+            <a class="about__social-link" href="mailto:andrei-angelescu@outlook.com">
+              <img class="about__social-icon" src="images/icon-email-circle.svg?v=21" alt="" aria-hidden="true" />
+              <span>andrei-angelescu@outlook.com</span>
+            </a>
+          </li>
+          <li>
+            <a class="about__social-link" href="https://www.linkedin.com/in/angelescuandrei/" target="_blank" rel="noopener noreferrer">
+              <img class="about__social-icon" src="images/icon-linkedin-circle.svg?v=21" alt="" aria-hidden="true" />
+              <span>LinkedIn</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <figure class="about__logo">
+        <img src="images/aa-logo.png?v=21" alt="AA Logo" />
+      </figure>
+      <button class="about__close" type="button" aria-label="Close about" data-about-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== HOME DOCK ===== -->
+  <nav class="dock" id="dock" aria-label="Home dock">
+    <div class="dock__inner" id="dockInner">
+      <button class="dock__item" data-app="home" data-action="reload" type="button" aria-label="Home">
+        <img src="images/dock-home.png?v=5" alt="" draggable="false" />
+        <span class="dock__tooltip">Home</span>
+      </button>
+      <button class="dock__item" data-app="portfolio" data-href="https://drive.google.com/file/d/16z7HJ2HNao7oFjSdOo6F8r9iJunYIjzB/view?usp=sharing" type="button" aria-label="Portfolio">
+        <img src="images/dock-portfolio.png?v=5" alt="" draggable="false" />
+        <span class="dock__tooltip">Portfolio</span>
+      </button>
+      <button class="dock__item" data-app="quantum-pill" data-href="https://substack.com/@quantumpill" type="button" aria-label="Quantum Pill (Newsletter)">
+        <img src="images/dock-quantum.png?v=5" alt="" draggable="false" />
+        <span class="dock__tooltip">Quantum Pill (Newsletter)</span>
+      </button>
+      <button class="dock__item" data-app="ai" type="button" aria-label="AI (Coming Soon)">
+        <img src="images/dock-ai.png?v=5" alt="" draggable="false" />
+        <span class="dock__tooltip">AI (Coming Soon)</span>
+      </button>
+      <span class="dock__divider" aria-hidden="true"></span>
+      <button class="dock__item" data-app="andrei" type="button" aria-label="Andrei">
+        <img src="images/dock-andrei.png?v=5" alt="" draggable="false" />
+        <span class="dock__tooltip">Andrei</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Motion One (motion.dev) — animation library, available globally as window.motion -->
+  <script type="module">
+    import * as motion from "https://cdn.jsdelivr.net/npm/motion@11.18.2/+esm";
+    window.motion = motion;
+    window.dispatchEvent(new Event("motion:ready"));
+  </script>
+  <script src="script.js?v=21" defer></script>
+</body>
+</html>
