@@ -31,9 +31,78 @@
     }
   }
 
-  function buildIntroText() {
+  /* ---------- Location lookup (IP-based, cached) ----------
+     Shared by the intro greeting AND the Dynamic Island weather so the
+     two stay consistent. Tries two free CORS-friendly providers in
+     sequence (ipapi.co → ipinfo.io). Aborts after 2.5s so a blocked /
+     slow lookup never holds up the page. Result is cached in
+     sessionStorage for the rest of the visit. */
+  const LOC_PROVIDERS = [
+    {
+      url: "https://ipapi.co/json/",
+      parse: (d) => {
+        if (!d || !d.city || d.error) return null;
+        return {
+          city: d.city,
+          country: d.country_name || d.country || null,
+          lat: typeof d.latitude === "number" ? d.latitude : null,
+          lon: typeof d.longitude === "number" ? d.longitude : null,
+        };
+      },
+    },
+    {
+      url: "https://ipinfo.io/json",
+      parse: (d) => {
+        if (!d || !d.city) return null;
+        let lat = null, lon = null;
+        if (typeof d.loc === "string" && d.loc.includes(",")) {
+          const [a, b] = d.loc.split(",").map(parseFloat);
+          if (!Number.isNaN(a) && !Number.isNaN(b)) { lat = a; lon = b; }
+        }
+        return {
+          city: d.city,
+          country: d.country || null,
+          lat,
+          lon,
+        };
+      },
+    },
+  ];
+
+  let locationPromise = null;
+  function lookupLocation() {
+    if (locationPromise) return locationPromise;
+    locationPromise = (async () => {
+      try {
+        const cached = sessionStorage.getItem("aa_loc");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.city) return parsed;
+        }
+      } catch (_) {}
+      for (const provider of LOC_PROVIDERS) {
+        try {
+          const controller = new AbortController();
+          const t = setTimeout(() => controller.abort(), 2500);
+          const r = await fetch(provider.url, { signal: controller.signal });
+          clearTimeout(t);
+          if (!r.ok) continue;
+          const data = await r.json();
+          const loc = provider.parse(data);
+          if (!loc || !loc.city) continue;
+          try { sessionStorage.setItem("aa_loc", JSON.stringify(loc)); } catch (_) {}
+          return loc;
+        } catch (_) { /* try next provider */ }
+      }
+      return null;
+    })();
+    return locationPromise;
+  }
+
+  async function buildIntroText() {
     const hour = new Date().getHours();
-    const city = cityFromTimezone() || "your city";
+    const loc = await lookupLocation();
+    const city = (loc && loc.city) || cityFromTimezone() || "your city";
     return `It's a great ${partOfDay(hour)} in ${city}`;
   }
 
@@ -71,10 +140,14 @@
     return chars.length * 30 + 600;
   }
 
-  function startIntro() {
+  async function startIntro() {
     if (!intro || !introText) return;
     document.body.classList.add("intro-active");
-    const animDuration = renderIntro(buildIntroText());
+    // Resolve the user's actual city before rendering. Has its own 2.5s
+    // network timeout, so worst-case the intro is delayed by ~2.5s — still
+    // far shorter than the intro hold itself.
+    const text = await buildIntroText();
+    const animDuration = renderIntro(text);
     const holdAfter = 1400;
     const dismiss = () => {
       intro.classList.add("is-leaving");
@@ -560,10 +633,20 @@
 
   async function fetchWeather() {
     try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const coords = TZ_COORDS[tz];
-      if (!coords) return null;
-      const [lat, lon] = coords;
+      // Prefer the user's actual lat/lon (IP geolocation). Fall back to the
+      // timezone-based coordinate map so weather still works if the IP
+      // lookup is blocked or fails.
+      let lat = null, lon = null;
+      const loc = await lookupLocation();
+      if (loc && typeof loc.lat === "number" && typeof loc.lon === "number") {
+        lat = loc.lat;
+        lon = loc.lon;
+      } else {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const coords = TZ_COORDS[tz];
+        if (!coords) return null;
+        [lat, lon] = coords;
+      }
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,is_day&timezone=auto`;
       const r = await fetch(url, { cache: "default" });
       if (!r.ok) return null;
