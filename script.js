@@ -91,34 +91,69 @@
     },
   ];
 
+  // `?nocache` or `?debug` skips the sessionStorage shortcut so anyone
+  // diagnosing a stale value sees a fresh lookup.
+  const URL_PARAMS = new URLSearchParams(window.location.search);
+  const SKIP_CACHE = URL_PARAMS.has("nocache") || URL_PARAMS.has("debug");
+  const DEBUG = URL_PARAMS.has("debug");
+
   let locationPromise = null;
   function lookupLocation() {
     if (locationPromise) return locationPromise;
     locationPromise = (async () => {
-      try {
-        const cached = sessionStorage.getItem("aa_loc");
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (parsed && parsed.city) return parsed;
-        }
-      } catch (_) {}
+      if (!SKIP_CACHE) {
+        try {
+          const cached = sessionStorage.getItem("aa_loc");
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (parsed && parsed.city) {
+              if (DEBUG) console.info("[geo] using sessionStorage cache:", parsed);
+              return parsed;
+            }
+          }
+        } catch (_) {}
+      }
       for (const provider of LOC_PROVIDERS) {
         try {
           const controller = new AbortController();
           const t = setTimeout(() => controller.abort(), 2500);
           const r = await fetch(provider.url, { signal: controller.signal });
           clearTimeout(t);
+          if (DEBUG) console.info("[geo] tried", provider.url, "→", r.status);
+          if (r.status === 204) continue; // explicit "no data" — try next
           if (!r.ok) continue;
           const data = await r.json();
           const loc = provider.parse(data);
           if (!loc || !loc.city) continue;
+          if (DEBUG) console.info("[geo] resolved:", loc);
           try { sessionStorage.setItem("aa_loc", JSON.stringify(loc)); } catch (_) {}
           return loc;
-        } catch (_) { /* try next provider */ }
+        } catch (e) {
+          if (DEBUG) console.warn("[geo]", provider.url, "failed:", e.message);
+        }
       }
+      if (DEBUG) console.warn("[geo] no provider returned a city");
       return null;
     })();
     return locationPromise;
+  }
+
+  // In debug mode, show a small banner at the bottom of the page once the
+  // location is resolved so friends can confirm what was detected without
+  // opening the dev console.
+  if (DEBUG) {
+    lookupLocation().then((loc) => {
+      const banner = document.createElement("div");
+      banner.style.cssText =
+        "position:fixed;left:50%;bottom:16px;transform:translateX(-50%);" +
+        "background:#1e1e1e;color:#fff;padding:8px 14px;border-radius:999px;" +
+        "font:500 12px 'Plus Jakarta Sans',system-ui,sans-serif;" +
+        "z-index:9999;box-shadow:0 6px 16px rgba(0,0,0,0.18);";
+      banner.textContent = loc
+        ? `geo: ${loc.city}, ${loc.country || "?"} (${loc.source})`
+        : "geo: lookup failed — falling back to timezone";
+      document.body.appendChild(banner);
+    });
   }
 
   async function buildIntroText() {
