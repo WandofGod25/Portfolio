@@ -1,0 +1,16 @@
+# Cloudflare Pages — HTTP response headers configuration
+# https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Force HTML to revalidate on every visit so the browser never serves a
+# stale index.html that points at an old script.js cache-buster.
+# Static assets (JS/CSS/images/SVGs/webp) keep their default caching so
+# repeat visits stay fast.
+
+/
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/index.html
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+
+/*.html
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
