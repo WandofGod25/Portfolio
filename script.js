@@ -33,11 +33,31 @@
 
   /* ---------- Location lookup (IP-based, cached) ----------
      Shared by the intro greeting AND the Dynamic Island weather so the
-     two stay consistent. Tries two free CORS-friendly providers in
-     sequence (ipapi.co → ipinfo.io). Aborts after 2.5s so a blocked /
-     slow lookup never holds up the page. Result is cached in
-     sessionStorage for the rest of the visit. */
+     two stay consistent.
+
+     Order of providers (highest reliability first):
+       1. /api/geo — same-origin, served by the Cloudflare Worker via
+          request.cf. Never blocked by ad-blockers because it's same-origin
+          and not a known tracking domain. Requires no external request.
+       2. ipapi.co/json/ — free CORS-friendly fallback.
+       3. ipinfo.io/json — second free CORS-friendly fallback.
+
+     Each attempt has a 2.5s abort timeout. Result is cached in
+     sessionStorage so the rest of the visit makes zero network calls. */
   const LOC_PROVIDERS = [
+    {
+      url: "/api/geo",
+      parse: (d) => {
+        if (!d || !d.city) return null;
+        return {
+          city: d.city,
+          country: d.countryName || d.country || null,
+          lat: typeof d.latitude === "number" ? d.latitude : null,
+          lon: typeof d.longitude === "number" ? d.longitude : null,
+          source: "cf",
+        };
+      },
+    },
     {
       url: "https://ipapi.co/json/",
       parse: (d) => {
@@ -47,6 +67,7 @@
           country: d.country_name || d.country || null,
           lat: typeof d.latitude === "number" ? d.latitude : null,
           lon: typeof d.longitude === "number" ? d.longitude : null,
+          source: "ipapi",
         };
       },
     },
@@ -64,6 +85,7 @@
           country: d.country || null,
           lat,
           lon,
+          source: "ipinfo",
         };
       },
     },
